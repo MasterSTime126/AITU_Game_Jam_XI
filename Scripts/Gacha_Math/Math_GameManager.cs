@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class Math_GameManager : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class Math_GameManager : MonoBehaviour
 
     [SerializeField] private TMP_Text inputText;
     [SerializeField] private TMP_Text questionText;
+
+    [Header("Some extra items heree")]
+    [SerializeField] private GameObject buttonsPanel;
 
     private string currentInput = "";
     private int correctAnswer;
@@ -61,7 +65,7 @@ public class Math_GameManager : MonoBehaviour
         {
             if (userAnswer == correctAnswer)
             {
-                currentQuestionIndex++;
+                AddCurrentQuestionIndex();
                 if (currentQuestionIndex < 5)
                 {
                     GenerateQuestion();
@@ -71,7 +75,8 @@ public class Math_GameManager : MonoBehaviour
                 else
                 {
                     //Add condition of level clear here
-                    SceneManager.LoadScene("_Main_Gacha");
+                    //Also add win animation here, which processess this one:
+                    //SceneManager.LoadScene("_Main_Gacha");
                 }
             }
             else
@@ -91,5 +96,79 @@ public class Math_GameManager : MonoBehaviour
         int num2 = Random.Range(5, 100);
         correctAnswer = num1 + num2;
         questionText.text = $"{num1} + {num2} = ?";
+    }
+
+    private void AddCurrentQuestionIndex()
+    {
+        currentQuestionIndex++;
+        switch (currentQuestionIndex)
+        {
+            case 2:
+                buttonsPanel.transform.rotation = Quaternion.Euler(0, 0, -180);
+                break;
+            case 3:
+                buttonsPanel.transform.rotation = Quaternion.identity;
+                break;
+            case 4:
+                buttonsPanel.transform.rotation = Quaternion.identity;
+                break;
+
+        }
+    }
+
+    private void Update()
+    {
+        if(currentQuestionIndex == 3)
+        {
+            buttonsPanel.transform.Rotate(0, 0, 20 * Time.deltaTime);
+        }
+        if(currentQuestionIndex == 4)
+        {
+            MoveAndClampButton(button1);
+            MoveAndClampButton(button2);
+            MoveAndClampButton(button3);
+            MoveAndClampButton(button4);
+            MoveAndClampButton(button5);
+            MoveAndClampButton(button6);
+            MoveAndClampButton(button7);
+            MoveAndClampButton(button8);
+            MoveAndClampButton(button9);
+            MoveAndClampButton(button0);
+            MoveAndClampButton(buttonClear);
+            MoveAndClampButton(buttonEnter);
+        }
+    }
+
+    // Moves the button randomly and clamps its position to stay within the screen bounds
+    private void MoveAndClampButton(Button btn)
+    {
+        // Move randomly
+        btn.transform.position = (Vector3)Random.insideUnitCircle * 25 + btn.transform.position;
+
+        // Clamp to screen bounds
+        Vector3 pos = btn.transform.position;
+        Vector3 min = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane));
+        Vector3 max = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.nearClipPlane));
+
+        // If using Canvas in Screen Space - Overlay, clamp using Screen.width/height directly
+        if (btn.transform is RectTransform rectTransform)
+        {
+            float width = rectTransform.rect.width * rectTransform.lossyScale.x;
+            float height = rectTransform.rect.height * rectTransform.lossyScale.y;
+            float minX = width / 2f;
+            float maxX = Screen.width - width / 2f;
+            float minY = height / 2f;
+            float maxY = Screen.height - height / 2f;
+            Vector3 screenPos = rectTransform.position;
+            screenPos.x = Mathf.Clamp(screenPos.x, minX, maxX);
+            screenPos.y = Mathf.Clamp(screenPos.y, minY, maxY);
+            rectTransform.position = screenPos;
+        }
+        else
+        {
+            pos.x = Mathf.Clamp(pos.x, min.x, max.x);
+            pos.y = Mathf.Clamp(pos.y, min.y, max.y);
+            btn.transform.position = pos;
+        }
     }
 }
