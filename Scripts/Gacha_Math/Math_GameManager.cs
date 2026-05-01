@@ -44,6 +44,7 @@ public class Math_GameManager : MonoBehaviour
         button0.onClick.AddListener(() => AppendInput("0"));
         buttonClear.onClick.AddListener(ClearInput);
         buttonEnter.onClick.AddListener(CheckAnswer);
+
     }
 
     private void AppendInput(string value)
