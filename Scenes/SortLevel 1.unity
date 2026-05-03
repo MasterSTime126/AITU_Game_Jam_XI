@@ -612,7 +612,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7311991848335375144, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: guideText
-      value: First steps
+      value: First steps are
       objectReference: {fileID: 0}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: hueCycleSpeed

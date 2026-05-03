@@ -452,7 +452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 207193215429964121, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 921536802865216375, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: m_Pivot.x
@@ -534,6 +534,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1596474293910854633, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2143053023803178423, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: m_Name
       value: Choose
@@ -564,7 +568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3833950199715084681, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 100
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 4041472743231829938, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: m_Name
@@ -612,11 +616,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6888768622926794554, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -100
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 7311991848335375144, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: guideText
-      value: Reversed path
+      value: 'Sometimes you Reverse '
       objectReference: {fileID: 0}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: hueCycleSpeed
@@ -624,7 +628,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: numberOfItems
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: animationCircle
@@ -640,19 +644,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: initialItemOrder.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
-      propertyPath: 'initialItemOrder.Array.data[0]'
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
-      propertyPath: 'initialItemOrder.Array.data[1]'
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
-      propertyPath: 'initialItemOrder.Array.data[2]'
+      propertyPath: 'initialItemOrder.Array.data[0]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: 'initialItemOrder.Array.data[1]'
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: 'initialItemOrder.Array.data[2]'
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: 'initialItemOrder.Array.data[3]'
