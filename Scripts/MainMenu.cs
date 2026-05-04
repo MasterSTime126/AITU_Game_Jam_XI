@@ -19,6 +19,7 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         StartCoroutine(LoadLevel());
+        
     }
 
     public void StartExtraLevel()
