@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int[] initialItemOrder;
     [SerializeField] private float hueCycleSpeed = 0.025f;
     [SerializeField] private bool isFinish = false;
+    [SerializeField] private bool isExtraLevel = false;
+
+    [SerializeField] private GameObject[] buttonsToHide;
 
     [SerializeField] private AuthorsAppear authorsAppear;
 
@@ -34,6 +37,26 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if(isExtraLevel)
+        {
+            if(PlayerPrefs.GetInt("FinishedGame", 0) == 0)
+            {
+                SceneManager.LoadScene(0);
+                return;
+            }
+            numberOfItems = PlayerPrefs.GetInt("BlocksCount", 5);
+            numberOfLockedItems = PlayerPrefs.GetInt("LocksCount", 0);
+            
+
+
+            buttonsToHide[0].SetActive(PlayerPrefs.GetInt("Left", 1) == 1);
+            buttonsToHide[1].SetActive(PlayerPrefs.GetInt("Right", 1) == 1);
+            buttonsToHide[2].SetActive(PlayerPrefs.GetInt("Inverse", 1) == 1);
+            buttonsToHide[3].SetActive(PlayerPrefs.GetInt("IndicatorLeft", 1) == 1);
+            buttonsToHide[4].SetActive(PlayerPrefs.GetInt("IndicatorRight", 1) == 1);
+            buttonsToHide[5].SetActive(PlayerPrefs.GetInt("Indicator", 1) == 1);
+            Debug.Log("Done 1");
+        }
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -72,6 +95,11 @@ public class GameManager : MonoBehaviour
         if(!WinAnimationRunning){
             currentHue = (currentHue + hueCycleSpeed * Time.deltaTime) % 1f;
             Camera.main.backgroundColor = Color.HSVToRGB(currentHue, 0.5f, 0.75f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("LevelConstructor");
         }
     }
 
@@ -124,6 +152,7 @@ public class GameManager : MonoBehaviour
                 values[randomIndex] = temp;
             }
         }
+        Debug.Log("Done 2");
         UpdateTargetPositions();
     }
 

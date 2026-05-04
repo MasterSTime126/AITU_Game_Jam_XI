@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &24309678 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5430808268335424906, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+  m_PrefabInstance: {fileID: 447214738824298303}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &211325225
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -217,10 +222,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7494003635712400165, guid: 59ffbabb31557977f9a69c59e8110527, type: 3}
   m_PrefabInstance: {fileID: 211325225}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &262198351 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 207193215429964121, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+  m_PrefabInstance: {fileID: 447214738824298303}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1292077484 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6269256232312914255, guid: 9a09e8c76b0a3d1439329a32bb7f1b0b, type: 3}
   m_PrefabInstance: {fileID: 5618845607219768601}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1464285150 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2143053023803178423, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+  m_PrefabInstance: {fileID: 447214738824298303}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1643979239
 GameObject:
@@ -359,6 +374,21 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &1726658485 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4041472743231829938, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+  m_PrefabInstance: {fileID: 447214738824298303}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1894984090 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2812538692617985259, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+  m_PrefabInstance: {fileID: 447214738824298303}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1902829355 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2446339345431761721, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+  m_PrefabInstance: {fileID: 447214738824298303}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1941761821
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,6 +560,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7311991848335375144, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: guideText
+      value: Esc to go Back
+      objectReference: {fileID: 0}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: isExtraLevel
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: hueCycleSpeed
       value: 0.01
@@ -543,8 +581,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1292077484}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: buttonsToHide.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: 'buttonsToHide.Array.data[0]'
+      value: 
+      objectReference: {fileID: 24309678}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: 'buttonsToHide.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1902829355}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: 'buttonsToHide.Array.data[2]'
+      value: 
+      objectReference: {fileID: 262198351}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: 'buttonsToHide.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1726658485}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: 'buttonsToHide.Array.data[4]'
+      value: 
+      objectReference: {fileID: 1894984090}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
+      propertyPath: 'buttonsToHide.Array.data[5]'
+      value: 
+      objectReference: {fileID: 1464285150}
+    - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: initialItemOrder.Array.size
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8415379989188071323, guid: 9c33f62a34d811c19b7468edf565d53f, type: 3}
       propertyPath: 'initialItemOrder.Array.data[0]'

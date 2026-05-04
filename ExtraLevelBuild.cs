@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 
 public class ExtraLevelBuild : MonoBehaviour
@@ -44,8 +45,16 @@ public class ExtraLevelBuild : MonoBehaviour
 
     private void Start()
     {
-        UpdateUI();
 
+        blocksCount = PlayerPrefs.GetInt("BlocksCount", 5);
+        locksCount = PlayerPrefs.GetInt("LocksCount", 0);
+        left = PlayerPrefs.GetInt("Left", 1) == 1;
+        right = PlayerPrefs.GetInt("Right", 1) == 1;
+        inverse = PlayerPrefs.GetInt("Inverse", 1) == 1;
+        indicatorLeft = PlayerPrefs.GetInt("IndicatorLeft", 1) == 1;
+        indicatorRight = PlayerPrefs.GetInt("IndicatorRight", 1) == 1;
+        indicator = PlayerPrefs.GetInt("Indicator", 1) == 1;
+        
         leftButton.onClick.AddListener(OnLeftButton);
         rightButton.onClick.AddListener(OnRightButton);
         inverseButton.onClick.AddListener(OnInverseButton);
@@ -58,6 +67,8 @@ public class ExtraLevelBuild : MonoBehaviour
         locksMoreButton.onClick.AddListener(OnLocksMoreButton);
         backButton.onClick.AddListener(OnBackButton);
         playButton.onClick.AddListener(OnPlayButton);
+    
+        UpdateUI();
     }
 
     private void UpdateUI()
@@ -183,11 +194,30 @@ public class ExtraLevelBuild : MonoBehaviour
     }
     public void OnBackButton()
     {
-        SceneManager.LoadScene("_MainMenu");
+        StartCoroutine(LoadScene("_MainMenu"));
     }
     public void OnPlayButton()
     {
-        SceneManager.LoadScene("LevelConstructed");
+        PlayerPrefs.SetInt("BlocksCount", blocksCount);
+        PlayerPrefs.SetInt("LocksCount", locksCount);
+        PlayerPrefs.SetInt("Left", left ? 1 : 0);
+        PlayerPrefs.SetInt("Right", right ? 1 : 0);
+        PlayerPrefs.SetInt("Inverse", inverse ? 1 : 0);
+        PlayerPrefs.SetInt("IndicatorLeft", indicatorLeft ? 1 : 0);
+        PlayerPrefs.SetInt("IndicatorRight", indicatorRight ? 1 : 0);
+        PlayerPrefs.SetInt("Indicator", indicator ? 1 : 0);
+        StartCoroutine(LoadScene("LevelConstructed"));
+    }
+
+    IEnumerator LoadScene(string sceneName)
+    {
+        // Simulate loading time
+        yield return new WaitForSeconds(.5f);
+        for(int i = 0; i < 100; i++){
+            Camera.main.backgroundColor = Color.Lerp(Camera.main.backgroundColor, Color.black, Time.deltaTime * 5f);
+            yield return null;
+        }
+        SceneManager.LoadScene(sceneName);
     }
 
 }
