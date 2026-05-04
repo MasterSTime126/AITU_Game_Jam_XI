@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 2537882373423050008, guid: c1d91e6d9e4cb71429b942c54496a995, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,3 +103,4 @@ MonoBehaviour:
   value: 0
   targetPosition: {x: 0, y: 0, z: 0}
   isChosen: 0
+  isLocked: 0
