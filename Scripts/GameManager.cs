@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform selectionIndicator; // A visual indicator for the current index
     [SerializeField] private int[] initialItemOrder;
     [SerializeField] private float hueCycleSpeed = 0.025f;
+    [SerializeField] private bool isFinish = false;
+
+    [SerializeField] private AuthorsAppear authorsAppear;
 
     private List<SortableItem> sortableItems = new List<SortableItem>();
     private int currentIndex = 0;
@@ -30,7 +34,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        StartCoroutine(StartAnimation());
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -39,6 +42,13 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+        StartCoroutine(StartAnimation());
+
+        if(isFinish)
+        {
+            selectionIndicator.gameObject.SetActive(false);
+            return;
+        }
 
         currentHue = Random.value; 
         InitializeItems();
@@ -46,6 +56,16 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if(isFinish)
+        {
+            if (Input.GetMouseButtonDown(0) && !WinAnimationRunning)
+            {
+                WinAnimationRunning = true;
+                StartCoroutine(WinAnimation());
+            }
+            return;
+        }
+
         UpdateSelectionIndicator();
         CheckWinCondition();
 
@@ -261,11 +281,22 @@ public class GameManager : MonoBehaviour
             Destroy(circle);
             
         }
-        yield return new WaitForSeconds(0.5f); // Small delay before resetting the game
+        
+        
+        if (isFinish)
+        {
+            authorsAppear.Disappear();
+            yield return new WaitForSeconds(0.5f); // Small delay before resetting the game
+            SceneManager.LoadScene(0);
+            yield break;
+        }
+
+        
         for(int i = 0; i < 100; i++){
             Camera.main.backgroundColor = Color.Lerp(Camera.main.backgroundColor, Color.black, Time.deltaTime * 5f);
             yield return null;
         }
+        yield return new WaitForSeconds(0.5f); // Small delay before resetting the game
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
         
     }
@@ -284,6 +315,8 @@ public class GameManager : MonoBehaviour
         animationCircle.SetActive(false);
 
         yield return null;
+        if(isFinish)
+            yield break;
         transform.GetChild(0).gameObject.SetActive(true);
     }
 

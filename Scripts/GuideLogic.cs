@@ -8,6 +8,7 @@ public class GuideLogic : MonoBehaviour
     [SerializeField] private float fadeInDuration = 1f;
     [SerializeField] private float displayDuration = 3f;
     [SerializeField] private float fadeOutDuration = 1f;
+    [SerializeField] private float delayBeforeStart = 1f;
 
     private CanvasGroup canvasGroup;
 
@@ -37,7 +38,7 @@ public class GuideLogic : MonoBehaviour
 
     private IEnumerator FadeInOutSequence()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(delayBeforeStart);
         // Fade in
         yield return Fade(0f, 1f, fadeInDuration);
 
