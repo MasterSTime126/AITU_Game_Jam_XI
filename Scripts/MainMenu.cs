@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class MainMenu : MonoBehaviour
 {
@@ -10,7 +11,9 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        PlayerPrefs.SetInt("FinishedGame", 1);
+        StartCoroutine(AnimationManager.Instance.PlayStartAnimation());
+        AudioSound.instance.PlayMenuMusic();
+        //PlayerPrefs.SetInt("FinishedGame", 0);
         if(PlayerPrefs.GetInt("FinishedGame", 0) == 1)
         {
             extraLevelButton.gameObject.SetActive(true);
@@ -54,10 +57,9 @@ public class MainMenu : MonoBehaviour
         extraLevelButton.gameObject.SetActive(false);
         // Simulate loading time
         yield return new WaitForSeconds(.5f);
-        for(int i = 0; i < 100; i++){
-            Camera.main.backgroundColor = Color.Lerp(Camera.main.backgroundColor, Color.black, Time.deltaTime * 5f);
-            yield return null;
-        }
+        if(AnimationManager.Instance != null)
+            yield return StartCoroutine(AnimationManager.Instance.PlayWinAnimation(new List<SortableItem>(), 0));
+        AudioSound.instance.StartMusicTransition();
         UnityEngine.SceneManagement.SceneManager.LoadScene("SortLevel 1");
     }
 }

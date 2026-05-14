@@ -197,9 +197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1c360fea1cc68518bcf1cce06d68c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationCirclePrefab: {fileID: 7494003635712400165, guid: 59ffbabb31557977f9a69c59e8110527, type: 3}
-  animationCircle: {fileID: 0}
   lockPrefab: {fileID: 783975590506444157, guid: bf8b3997f3c97f51aa9c3cc5ae5b7d5e, type: 3}
+  goldenBlockPrefab: {fileID: 3883273606147190596, guid: a916836e36423ec3ebbf029af8a11c1a, type: 3}
   buttonPrefab: {fileID: 2088485914844029853, guid: 9a2488147369ab908adcf0678d29baac, type: 3}
   sortableItemPrefab: {fileID: 220341346002097057, guid: 87ddb112c010f69a3b58550b5a4088e1, type: 3}
   numberOfItems: 5
@@ -208,6 +207,10 @@ MonoBehaviour:
   selectionIndicator: {fileID: 0}
   initialItemOrder: 
   hueCycleSpeed: 0.025
+  isFinish: 0
+  isExtraLevel: 0
+  buttonsToHide: []
+  authorsAppear: {fileID: 0}
 --- !u!1 &6409890730328482333
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,6 +365,8 @@ MonoBehaviour:
   fadeInDuration: 1
   displayDuration: 3
   fadeOutDuration: 1
+  delayBeforeStart: 1
+  loop: 0
 --- !u!1001 &91881244202245674
 PrefabInstance:
   m_ObjectHideFlags: 0

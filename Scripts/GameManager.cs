@@ -9,9 +9,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] private GameObject animationCirclePrefab;
-    [SerializeField] private GameObject animationCircle;
     [SerializeField] private GameObject lockPrefab;
+    [SerializeField] private GameObject goldenBlockPrefab;
 
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private GameObject sortableItemPrefab;
@@ -73,7 +72,13 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        if(PlayerPrefs.GetInt("Indicator", 1) == 0){
+            selectionIndicator.gameObject.SetActive(false);
+            Debug.Log("Indicator disabled");
+        }
+
         currentHue = Random.value; 
+        selectionIndicator.gameObject.SetActive(false);
         InitializeItems();
     }
 
@@ -94,10 +99,10 @@ public class GameManager : MonoBehaviour
 
         if(!WinAnimationRunning){
             currentHue = (currentHue + hueCycleSpeed * Time.deltaTime) % 1f;
-            Camera.main.backgroundColor = Color.HSVToRGB(currentHue, 0.5f, 0.75f);
+            Camera.main.backgroundColor = Color.HSVToRGB(currentHue, 0.5f, .8f);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (isExtraLevel && Input.GetKeyDown(KeyCode.Escape))
         {
             SceneManager.LoadScene("LevelConstructor");
         }
@@ -130,7 +135,9 @@ public class GameManager : MonoBehaviour
             GameObject itemGO = Instantiate(sortableItemPrefab, GetPositionForIndex(i), Quaternion.identity);
             SortableItem item = itemGO.GetComponent<SortableItem>();
             item.value = values[i];
-            item.GetComponent<SpriteRenderer>().color = Color.HSVToRGB(item.value / (float)numberOfItems, 0.8f, 0.9f);
+            item.GetComponent<SpriteRenderer>().color = Color.HSVToRGB(item.value / (float)numberOfItems, 0.5f, 1f);
+            if (goldenBlockPrefab != null)
+                item.SetGoldenChild(goldenBlockPrefab);
             sortableItems.Add(item);
         }
 
@@ -154,13 +161,29 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log("Done 2");
         UpdateTargetPositions();
+        UpdateCorrectHighlights();
     }
 
     private void UpdateTargetPositions()
     {
         for (int i = 0; i < sortableItems.Count; i++)
         {
-            sortableItems[i].targetPosition = GetPositionForIndex(i);
+            if (sortableItems[i] != null)
+            {
+                sortableItems[i].targetPosition = GetPositionForIndex(i);
+            }
+        }
+        UpdateCorrectHighlights();
+    }
+
+    private void UpdateCorrectHighlights()
+    {
+        for (int i = 0; i < sortableItems.Count; i++)
+        {
+            if (sortableItems[i] != null)
+            {
+                sortableItems[i].SetCorrectHighlight(sortableItems[i].value == i);
+            }
         }
     }
 
@@ -180,10 +203,17 @@ public class GameManager : MonoBehaviour
     public void MoveLeft()
     {
         if (sortableItems.Count == 0) return;
-            // Rotate all items
+
             SortableItem first = sortableItems[0];
             sortableItems.RemoveAt(0);
             sortableItems.Add(first);
+
+            if(currentlyChosenItem != null){
+                int nullPos = currentIndex;
+                sortableItems[(currentIndex+numberOfItems-1) % numberOfItems] = sortableItems[nullPos];
+                sortableItems[nullPos] = null;
+            }
+            
             UpdateTargetPositions();
 
         Debug.Log("Move Left");
@@ -196,13 +226,20 @@ public class GameManager : MonoBehaviour
         SortableItem last = sortableItems[sortableItems.Count - 1];
         sortableItems.RemoveAt(sortableItems.Count - 1);
         sortableItems.Insert(0, last);
+
+        if(currentlyChosenItem != null){
+            int nullPos = currentIndex;
+            sortableItems[(currentIndex + 1) % numberOfItems] = sortableItems[nullPos];
+            sortableItems[nullPos] = null;
+        }
+
         UpdateTargetPositions();
         Debug.Log("Move Right");
     }
 
     public void Choose()
     {
-        if (sortableItems.Count == 0) return;
+        if (sortableItems.Count == 0 && currentlyChosenItem == null) return;
 
         if (currentlyChosenItem == null)
         {
@@ -211,21 +248,29 @@ public class GameManager : MonoBehaviour
                 Debug.Log("This item is locked and cannot be chosen.");
                 return;
             }
-            selectionIndicator.gameObject.GetComponent<SpriteRenderer>().color = Color.clear; // Indicate choosing mode
+            //selectionIndicator.gameObject.GetComponent<SpriteRenderer>().color = Color.clear; // Indicate choosing mode
+            
             // Choose the item at currentIndex
             currentlyChosenItem = sortableItems[currentIndex];
+            sortableItems[currentIndex] = null; // Leave a gap
+            
             currentlyChosenItem.isChosen = true;
+            currentlyChosenItem.SetCorrectHighlight(false); // Hide golden highlight while held
             currentlyChosenItem.transform.position += Vector3.up * 1.0f; // Move chosen item up
         }
         else
         {
+            if (sortableItems[currentIndex] != null)
+            {
+                Debug.Log("Cannot place item here, space is already occupied.");
+                return;
+            }
+
             selectionIndicator.gameObject.GetComponent<SpriteRenderer>().color = Color.white; // Reset indicator color
+            
             // Un-choose the item and place it back at currentIndex
             currentlyChosenItem.isChosen = false;
-            
-            // Find the chosen item in the list, remove it, and insert it at the current index
-            sortableItems.Remove(currentlyChosenItem);
-            sortableItems.Insert(currentIndex, currentlyChosenItem);
+            sortableItems[currentIndex] = currentlyChosenItem; // Place it in the gap
 
             currentlyChosenItem = null;
             UpdateTargetPositions(); // Return to line
@@ -259,7 +304,7 @@ public class GameManager : MonoBehaviour
     public void CheckWinCondition()
     {
         if(WinAnimationRunning) return;
-        if (sortableItems.Count == 0) return;
+        if (sortableItems.Count == 0 || currentlyChosenItem != null) return;
 
         if (!IsSorted(sortableItems.Select(item => item.value).ToList()))
             return;
@@ -283,37 +328,37 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WinAnimation()
     {
+        // Fade out all golden highlights first
+        float fadeDuration = 0.4f;
+        foreach (var item in sortableItems)
+            if (item != null) StartCoroutine(item.FadeOutGoldenChild(fadeDuration));
+
+        yield return new WaitForSeconds(fadeDuration + .1f);
 
         transform.GetChild(0).gameObject.SetActive(false); // Hide buttons
         selectionIndicator.gameObject.SetActive(false); // Hide selection indicator
         yield return new WaitForSeconds(0.5f); // Small delay before starting the animation
 
-        Color tempColor = Camera.main.backgroundColor;
-        for (int i = 0; i < sortableItems.Count; i++)
+        if (AnimationManager.Instance != null)
         {
-            // Create a circle animation at the center of the screen
-            GameObject circle = Instantiate(animationCirclePrefab, sortableItems[i].transform.position, Quaternion.identity);
-            SpriteRenderer sr = circle.GetComponent<SpriteRenderer>();
-            float duration = 0.5f;
-            float elapsed = 0f;
-            tempColor = Color.HSVToRGB(sortableItems[i].value / (float)numberOfItems, 0.8f, 0.9f);
-            sr.color = tempColor;
-            Destroy(sortableItems[i].gameObject);
-            while (elapsed < duration)
-            {
-                elapsed += Time.deltaTime;
-                float scale = Mathf.Lerp(1f, 35f, elapsed / duration);
-                circle.transform.localScale = new Vector3(scale, scale, 1);
-                yield return null;
-            }
-            Camera.main.backgroundColor = tempColor;
-            Destroy(circle);
-            
+            yield return StartCoroutine(AnimationManager.Instance.PlayWinAnimation(sortableItems, numberOfItems));
+        }
+        else
+        {
+            Debug.LogError("AnimationManager instance not found. Please ensure an object with the AnimationManager script is active in the scene.");
+            // Fallback or stop execution if the animation is critical
+            yield break; 
         }
         
+        if (AudioSound.instance != null)
+        {
+            AudioSound.instance.LevelCompleted();
+            AudioSound.instance.TransitionToIntense();
+        }
         
         if (isFinish)
         {
+            PlayerPrefs.SetInt("FinishedGame", 1);
             authorsAppear.Disappear();
             yield return new WaitForSeconds(0.5f); // Small delay before resetting the game
             SceneManager.LoadScene(0);
@@ -321,10 +366,6 @@ public class GameManager : MonoBehaviour
         }
 
         
-        for(int i = 0; i < 100; i++){
-            Camera.main.backgroundColor = Color.Lerp(Camera.main.backgroundColor, Color.black, Time.deltaTime * 5f);
-            yield return null;
-        }
         yield return new WaitForSeconds(0.5f); // Small delay before resetting the game
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
         
@@ -333,16 +374,15 @@ public class GameManager : MonoBehaviour
     private IEnumerator StartAnimation()
     {
         transform.GetChild(0).gameObject.SetActive(false);
-        float duration = 1.0f;
-        float elapsed = 0f;
-        while (elapsed < duration)
+        if (AnimationManager.Instance != null)
         {
-            animationCircle.transform.localScale = Vector3.Lerp(Vector3.one*35f, Vector3.zero, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
+            yield return StartCoroutine(AnimationManager.Instance.PlayStartAnimation());
         }
-        animationCircle.SetActive(false);
-
+        else
+        {
+            Debug.LogError("AnimationManager instance not found. Please ensure an object with the AnimationManager script is active in the scene.");
+            yield break;
+        }
         yield return null;
         if(isFinish)
             yield break;

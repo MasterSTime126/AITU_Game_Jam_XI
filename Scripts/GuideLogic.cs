@@ -9,6 +9,8 @@ public class GuideLogic : MonoBehaviour
     [SerializeField] private float displayDuration = 3f;
     [SerializeField] private float fadeOutDuration = 1f;
     [SerializeField] private float delayBeforeStart = 1f;
+    [SerializeField] private bool loop = false;
+
 
     private CanvasGroup canvasGroup;
 
@@ -48,7 +50,14 @@ public class GuideLogic : MonoBehaviour
         // Fade out
         yield return Fade(1f, 0f, fadeOutDuration);
 
-        gameObject.SetActive(false);
+        if (loop)
+        {
+            StartCoroutine(FadeInOutSequence());
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private IEnumerator Fade(float startAlpha, float endAlpha, float duration)
